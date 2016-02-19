@@ -33,7 +33,7 @@ public class SSLServiceNaga {
 				@Override
 				public void newConnection(final NIOSocket nioSocket) {
 
-					nioSocket.listen(new SocketObserver() {
+					nioSocket.listen(new SSLSocketObserver() {
 						@Override
 						public void packetReceived(NIOSocket socket, byte[] packet) {
 							System.out.println("Received " + socket.getIp() + ": " +new String(packet));
