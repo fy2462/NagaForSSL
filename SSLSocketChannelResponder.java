@@ -38,16 +38,13 @@ public class SSLSocketChannelResponder implements NIOSocketSSL, SocketObserver {
 	private final NIOService m_nioService;
 	private SocketObserver m_observer;
 
-	public SSLSocketChannelResponder(NIOService nioService, NIOSocket wrappedSocket, SSLEngine engine, boolean client)
-			throws SSLException {
+	public SSLSocketChannelResponder(NIOService nioService, NIOSocket wrappedSocket, SSLEngine engine, boolean client) throws SSLException {
 		m_nioService = nioService;
 		m_wrappedSocket = wrappedSocket;
 		m_packetHandler = new SSLPacketHandler(engine, m_wrappedSocket, this);
 		m_wrappedSocket.setPacketReader(m_packetHandler);
 		m_wrappedSocket.setPacketWriter(m_packetHandler);
-
 		engine.setUseClientMode(client);
-
 	}
 
 	public void beginHandshake() throws SSLException {
@@ -184,6 +181,7 @@ public class SSLSocketChannelResponder implements NIOSocketSSL, SocketObserver {
 
 	public void connectionBroken(NIOSocket nioSocket, Exception exception) {
 		try {
+			m_packetHandler.setHandFinished(false);
 			if (m_observer != null)
 				m_observer.connectionBroken(this, exception);
 		} catch (Exception e) {
@@ -193,7 +191,7 @@ public class SSLSocketChannelResponder implements NIOSocketSSL, SocketObserver {
 
 	public void packetReceived(NIOSocket socket, byte[] packet) {
 		try {
-			if (m_observer != null)
+			if (m_observer != null && packet.length > 1)
 				m_observer.packetReceived(this, packet);
 		} catch (Exception e) {
 			m_nioService.notifyException(e);

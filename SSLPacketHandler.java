@@ -59,6 +59,7 @@ public class SSLPacketHandler implements PacketReader, PacketWriter {
 	private final NIOSocket m_socket;
 	private final SSLSocketChannelResponder m_responder;
 	private boolean m_sslInitiated;
+	private boolean m_isHandFinished = false;
 
 	public SSLPacketHandler(SSLEngine engine, NIOSocket socket, SSLSocketChannelResponder responder) {
 		m_engine = engine;
@@ -68,6 +69,10 @@ public class SSLPacketHandler implements PacketReader, PacketWriter {
 		m_reader = RawPacketReader.INSTANCE;
 		m_responder = responder;
 		m_sslInitiated = false;
+	}
+
+	public void setHandFinished(boolean isHandFinished) {
+		m_isHandFinished = isHandFinished;
 	}
 
 	public PacketReader getReader() {
@@ -151,8 +156,11 @@ public class SSLPacketHandler implements PacketReader, PacketWriter {
 			return;
 		switch (status) {
 		case NOT_HANDSHAKING:
-			m_responder.handleFinished(m_socket);
-			break;
+			if (!m_isHandFinished) {
+				m_isHandFinished = true;
+				m_responder.handleFinished(m_socket);
+				break;
+			}
 		case NEED_UNWRAP:
 			break;
 		case NEED_TASK:
@@ -160,10 +168,10 @@ public class SSLPacketHandler implements PacketReader, PacketWriter {
 			break;
 		case FINISHED:
 			if (m_socket.isOpen()) {
-				if (!m_engine.getUseClientMode()) {
-					m_socket.write(new byte[] {0});
-				} else {
+				if (m_engine.getUseClientMode()) {
 					m_socket.write(new byte[0]);
+				} else {
+					m_socket.write(new byte[] {0});
 				}
 			}
 			break;
