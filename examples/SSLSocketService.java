@@ -1,4 +1,4 @@
-package com.android;
+package com.example.ssldemo.naga.examples;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,15 +11,14 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManagerFactory;
 
-import com.naga.NIOServerSocketSSL;
-import com.naga.NIOService;
-import com.naga.NIOSocket;
-import com.naga.NIOSocketSSL;
-import com.naga.SSLSocketObserver;
-import com.naga.ServerSocketObserverAdapter;
-import com.naga.SocketObserver;
+import com.example.ssldemo.naga.NIOServerSocketSSL;
+import com.example.ssldemo.naga.NIOService;
+import com.example.ssldemo.naga.NIOSocket;
+import com.example.ssldemo.naga.NIOSocketSSL;
+import com.example.ssldemo.naga.SSLSocketObserver;
+import com.example.ssldemo.naga.ServerSocketObserverAdapter;
 
-public class SSLServiceNaga {
+public class SSLSocketService {
 
 	private static final int SERVICR_PORT = 8881;
 

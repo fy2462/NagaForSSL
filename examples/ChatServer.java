@@ -19,13 +19,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package naga.examples;
+package com.example.ssldemo.naga.examples;
 
-import naga.*;
-import naga.eventmachine.DelayedEvent;
-import naga.eventmachine.EventMachine;
-import naga.packetreader.AsciiLinePacketReader;
-import naga.packetwriter.AsciiLinePacketWriter;
+import com.example.ssldemo.naga.*;
+import com.example.ssldemo.naga.eventmachine.DelayedEvent;
+import com.example.ssldemo.naga.eventmachine.EventMachine;
+import com.example.ssldemo.naga.packetreader.AsciiLinePacketReader;
+import com.example.ssldemo.naga.packetwriter.AsciiLinePacketWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;

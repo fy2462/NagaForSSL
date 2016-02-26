@@ -1,10 +1,7 @@
-package com.example.ssldemo;
+package com.example.ssldemo.naga.examples;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -18,40 +15,29 @@ import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManagerFactory;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import com.example.ssldemo.naga.NIOService;
 import com.example.ssldemo.naga.NIOSocket;
 import com.example.ssldemo.naga.NIOSocketSSL;
 import com.example.ssldemo.naga.SSLSocketChannelResponder;
 import com.example.ssldemo.naga.SSLSocketObserver;
 
-public class MainActivity extends Activity {
+public class SSLSocketClient {
 
 	private static final String SERVICR_HOST = "10.192.42.174";
 	private static final int SERVICR_PORT = 8881;
 	public static final String TAG = "SSL"; 
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+	
+	public static void main(String... args) {
 		creatNIOSSLConnect();
 	}
 
-	private void creatNIOSSLConnect() {
+	private static void creatNIOSSLConnect() {
 		new Thread() {
 			public void run() {
 				try {
 					NIOService service = new NIOService();
 
 					SSLEngine engine = getSSLContext().createSSLEngine();
-					// SSLEngine engine = _FakeX509TrustManager.allowAllSSL();
 					if (null != engine) {
 						SSLSocketChannelResponder socket = service.openSSLSocket(engine,
 								SERVICR_HOST, SERVICR_PORT);
@@ -73,7 +59,6 @@ public class MainActivity extends Activity {
 								System.out.println("*Connection broken");
 								if (exception != null)
 									exception.printStackTrace();
-								// System.exit(9);
 							}
 
 							public void packetReceived(NIOSocket socket, byte[] packet) {
@@ -99,7 +84,7 @@ public class MainActivity extends Activity {
 		}.start();
 	}
 
-	public SSLContext getSSLContext() throws KeyStoreException, IOException,
+	public static SSLContext getSSLContext() throws KeyStoreException, IOException,
 			NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException,
 			KeyManagementException {
 				
@@ -107,8 +92,8 @@ public class MainActivity extends Activity {
 		KeyStore keyStore = KeyStore.getInstance("BKS");
 		KeyStore trustStore = KeyStore.getInstance("BKS");
 
-		keyStore.load(getResources().openRawResource(R.raw.clientkey), password);
-		trustStore.load(getResources().openRawResource(R.raw.clienttrust), password);
+		keyStore.load(new FileInputStream("ssl/clientkey.jks"), password);
+		trustStore.load(new FileInputStream("ssl/clienttrust.jks"), password);
 
 		KeyManagerFactory kmf = KeyManagerFactory.getInstance("X509");
 		kmf.init(keyStore, password);
@@ -121,14 +106,12 @@ public class MainActivity extends Activity {
 		return sslContext;
 	}
 
-	// 发数据
-	public void sendMessage(NIOSocket socket) {
-		socket.write(cp.getBytes());
+	public static void sendMessage(NIOSocket socket) {
+		socket.write("hello word".getBytes());
 		System.out.println("*Client sent: hello word -- 11111");
 	}
 
-	// 收数据
-	public void receivMessage(String string) {
+	public static void receivMessage(String string) {
 		// TODO Auto-generated method stub
 	}
 

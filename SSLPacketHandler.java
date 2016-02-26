@@ -19,7 +19,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-package com.naga;
+package com.example.ssldemo.naga;
 
 import java.io.EOFException;
 import java.nio.ByteBuffer;
@@ -30,9 +30,10 @@ import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
 import javax.net.ssl.SSLException;
 
-import com.naga.exception.ProtocolViolationException;
-import com.naga.packetreader.RawPacketReader;
-import com.naga.packetwriter.RawPacketWriter;
+import com.example.ssldemo.naga.exception.ProtocolViolationException;
+import com.example.ssldemo.naga.packetreader.RawPacketReader;
+import com.example.ssldemo.naga.packetwriter.RawPacketWriter;
+
 
 /**
  * Undocumented Class
